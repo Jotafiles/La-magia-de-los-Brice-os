@@ -307,21 +307,7 @@
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "5d5810fe-d8e1-495b-a7a9-c934482c9840",
-          allowLocalhostAsSecureOrigin: true, // Permitir pruebas locales
-          notifyButton: { enable: true }, // Muestra el botón para activar notificaciones
-        });
-
-        // Registrar cambio de suscripción
-        OneSignal.User.PushSubscription.addEventListener("change", function(subscription) {
-          console.log("Estado de suscripción cambió:", subscription);
-        });
-
-        // Mostrar alerta o toast al activar notificaciones
-        OneSignal.Notifications.addEventListener("permissionChange", function(e) {
-          if (e.permission === "granted") {
-            alert("🎅 Notificaciones activadas correctamente!");
-          }
+          appId: "d00a26de-2969-48a5-94e4-6ccb54b92e24",
         });
       });
     </script>
