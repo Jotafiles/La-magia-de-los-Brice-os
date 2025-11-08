@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#8B0000">
+    <title>🎄 Navidad Random - Sorteo Familiar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Efecto de nieve de fondo -->
+    <div class="snow-container" id="snowContainer"></div>
+    
+    <!-- Contenedor principal -->
+    <div class="app-container">
+        
+        <!-- PANTALLA DE LOGIN -->
+        <div id="loginScreen" class="screen active">
+            <div class="logo-container">
+                <div class="gift-icon animated-gift">🎁</div>
+                <h1 class="main-title">Navidad Random</h1>
+                <p class="subtitle">🎅 La magia de regalar comienza aquí</p>
+            </div>
+            
+            <div class="login-card">
+                <div class="input-group">
+                    <label for="loginEmail">📧 Correo electrónico</label>
+                    <input type="email" id="loginEmail" placeholder="tu-correo@ejemplo.com" autocomplete="email">
+                </div>
+                
+                <div class="input-group">
+                    <label for="loginPassword">🔒 Contraseña</label>
+                    <input type="password" id="loginPassword" placeholder="Tu contraseña secreta">
+                </div>
+                
+                <button class="btn-primary" id="loginBtn">
+                    <span>🎄 Entrar al Sorteo</span>
+                </button>
+                
+                <div class="divider">
+                    <span>o</span>
+                </div>
+                
+                <button class="btn-secondary" id="registerBtn">
+                    <span>✨ Registrarse</span>
+                </button>
+            </div>
+            
+            <div class="christmas-lights"></div>
+        </div>
+
+        <!-- PANTALLA DE REGISTRO -->
+        <div id="registerScreen" class="screen">
+            <div class="header-back">
+                <button class="btn-back" id="backToLoginBtn">← Volver</button>
+                <h2>Registro Navideño 🎅</h2>
+            </div>
+            
+            <div class="register-card">
+                <div class="input-group">
+                    <label for="registerName">🎭 Nombre o Apodo</label>
+                    <input type="text" id="registerName" placeholder="Ej: Tío Lucho">
+                </div>
+                
+                <div class="input-group">
+                    <label for="registerEmail">📧 Correo electrónico</label>
+                    <input type="email" id="registerEmail" placeholder="tu-correo@ejemplo.com">
+                </div>
+                
+                <div class="input-group">
+                    <label for="registerPassword">🔒 Contraseña</label>
+                    <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres">
+                </div>
+                
+                <button class="btn-primary" id="confirmRegisterBtn">
+                    <span>🎁 Unirme a la Familia</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- PANTALLA PRINCIPAL (Inicio) -->
+        <div id="homeScreen" class="screen">
+            <div class="home-header">
+                <h1 class="welcome-title">🎄 Bienvenido, <span id="userName">Familia</span>!</h1>
+                <div class="countdown-card">
+                    <p class="countdown-label">🎅 Faltan para Navidad:</p>
+                    <div id="countdown" class="countdown-timer">Calculando...</div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta de Resultado Guardado (se muestra si ya reveló) -->
+            <div id="savedResultCard" class="saved-result-card hidden">
+                <div class="saved-result-header">
+                    <h3>🎁 Tu Regalo Asignado</h3>
+                    <span class="saved-badge">Guardado</span>
+                </div>
+                <div class="saved-result-content">
+                    <p class="saved-label">Le toca regalar a:</p>
+                    <div class="saved-recipient">
+                        <span class="saved-avatar" id="savedAvatar">🎅</span>
+                        <span class="saved-name" id="savedName">Cargando...</span>
+                    </div>
+                    <p class="saved-message" id="savedMessage">¡No olvides preparar tu regalo! 🎄</p>
+                    <div class="saved-footer">
+                        <p class="saved-date">Revelado: <span id="savedDate">---</span></p>
+                        <button class="btn-small" id="viewAgainBtn">
+                            <span>👀 Ver Detalles</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-action-card" id="mainActionCard">
+                <div class="gift-box-animation">
+                    <div class="gift-box">🎁</div>
+                </div>
+                <h2>¿Listo para descubrir?</h2>
+                <p>Presiona el regalo para ver a quién le toca regalar</p>
+                <button class="btn-huge" id="openGiftBtn">
+                    <span>🎁 Abrir Mi Regalo</span>
+                </button>
+            </div>
+            
+            <!-- Notificación flotante -->
+            <div id="notification" class="notification hidden"></div>
+        </div>
+
+        <!-- PANTALLA DE SORTEO/REVELACIÓN -->
+        <div id="giftScreen" class="screen">
+            <div class="reveal-container">
+                <!-- Estado de carga -->
+                <div id="loadingState" class="loading-state">
+                    <div class="spinning-gift">🎁</div>
+                    <h2>Preparando tu sorpresa...</h2>
+                    <div class="loading-dots">
+                        <span>.</span><span>.</span><span>.</span>
+                    </div>
+                </div>
+                
+                <!-- Resultado revelado -->
+                <div id="revealState" class="reveal-state hidden">
+                    <div class="confetti-explosion" id="confettiContainer"></div>
+                    
+                    <div class="reveal-card">
+                        <h2 class="reveal-title">🎉 ¡Sorpresa!</h2>
+                        <p class="reveal-subtitle" id="revealMessage">Te toca regalarle a...</p>
+                        
+                        <div class="recipient-card">
+                            <div class="recipient-avatar">🎅</div>
+                            <h3 class="recipient-name" id="recipientName">Cargando...</h3>
+                            <p class="funny-message" id="funnyMessage">¡Prepárate para la mejor sorpresa!</p>
+                        </div>
+                        
+                        <div class="reveal-details">
+                            <p>📅 Revelado: <span id="revealTime">Ahora</span></p>
+                        </div>
+                        
+                        <button class="btn-primary" id="backToHomeBtn">
+                            <span>🏠 Volver al Inicio</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE PARTICIPANTES -->
+        <div id="participantsScreen" class="screen">
+            <div class="screen-header">
+                <h2>👨‍👩‍👧‍👦 Familia Participante</h2>
+                <p class="screen-subtitle">Todos los que se unieron al sorteo</p>
+            </div>
+            
+            <div class="participants-list" id="participantsList">
+                <div class="loading-participants">
+                    <div class="spinning-gift">🎄</div>
+                    <p>Cargando familia...</p>
+                </div>
+            </div>
+            
+            <!-- Botones de admin (solo visibles para administrador) -->
+            <div class="admin-only hidden">
+                <button class="btn-admin" id="adminDrawBtn">
+                    <span>🎲 Ejecutar Sorteo Nuevo</span>
+                </button>
+                
+                <button class="btn-admin" id="resetDrawBtn" style="background: linear-gradient(135deg, #E65100, #FF6F00);">
+                    <span>🔄 Reiniciar Sorteo Actual</span>
+                </button>
+                
+                <button class="btn-admin" id="viewResultsBtn" style="background: linear-gradient(135deg, #0277BD, #0288D1);">
+                    <span>👀 Ver Todos los Resultados</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE NOTIFICACIONES -->
+        <div id="notificationsScreen" class="screen">
+            <div class="screen-header">
+                <h2>🔔 Notificaciones Navideñas</h2>
+                <p class="screen-subtitle">Mantente al tanto de todo</p>
+            </div>
+            
+            <div class="notifications-list" id="notificationsList">
+                <div class="empty-notifications">
+                    <div class="empty-icon">🎄</div>
+                    <p>No hay notificaciones aún</p>
+                    <span>Te avisaremos cuando haya novedades</span>
+                </div>
+            </div>
+            
+            <!-- Botón de admin para borrar notificaciones -->
+            <div class="admin-only hidden" style="margin-top: 20px;">
+                <button class="btn-danger" id="deleteNotificationsBtn">
+                    <span>🗑️ Borrar Todas las Notificaciones</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE PERFIL -->
+        <div id="profileScreen" class="screen">
+            <div class="screen-header">
+                <h2>⚙️ Mi Perfil</h2>
+            </div>
+            
+            <div class="profile-card">
+                <div class="profile-avatar">🎅</div>
+                <h3 id="profileName">Cargando...</h3>
+                <p id="profileEmail">correo@ejemplo.com</p>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="statParticipants">0</span>
+                        <span class="stat-label">Participantes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="statDays">0</span>
+                        <span class="stat-label">Días para Navidad</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel de estadísticas de administrador -->
+            <div class="admin-only hidden" style="margin-bottom: 20px;">
+                <div class="admin-panel">
+                    <h3 style="text-align: center; color: var(--color-primary); margin-bottom: 20px;">
+                        👑 Panel de Administración
+                    </h3>
+                    <div id="adminStats">
+                        <div class="loading-participants">
+                            <div class="spinning-gift">📊</div>
+                            <p>Cargando estadísticas...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <button class="btn-secondary" id="toggleThemeBtn">
+                    <span>🌙 Cambiar Tema</span>
+                </button>
+                
+                <button class="btn-danger" id="logoutBtn">
+                    <span>🚪 Cerrar Sesión</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- BARRA DE NAVEGACIÓN INFERIOR -->
+        <nav class="bottom-nav hidden" id="bottomNav">
+            <button class="nav-item active" data-screen="homeScreen">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Inicio</span>
+            </button>
+            
+            <button class="nav-item" data-screen="participantsScreen">
+                <span class="nav-icon">👨‍👩‍👧‍👦</span>
+                <span class="nav-label">Familia</span>
+            </button>
+            
+            <button class="nav-item nav-item-main" data-screen="giftScreen">
+                <span class="nav-icon-main">🎁</span>
+            </button>
+            
+            <button class="nav-item" data-screen="notificationsScreen">
+                <span class="nav-icon">🔔</span>
+                <span class="nav-label">Alertas</span>
+                <span class="notification-badge hidden" id="notificationBadge">0</span>
+            </button>
+            
+            <button class="nav-item" data-screen="profileScreen">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Perfil</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- Toast de notificaciones -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- OneSignal Web Push -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "5d5810fe-d8e1-495b-a7a9-c934482c9840",
+          allowLocalhostAsSecureOrigin: true, // Permitir pruebas locales
+          notifyButton: { enable: true }, // Muestra el botón para activar notificaciones
+        });
+
+        // Registrar cambio de suscripción
+        OneSignal.User.PushSubscription.addEventListener("change", function(subscription) {
+          console.log("Estado de suscripción cambió:", subscription);
+        });
+
+        // Mostrar alerta o toast al activar notificaciones
+        OneSignal.Notifications.addEventListener("permissionChange", function(e) {
+          if (e.permission === "granted") {
+            alert("🎅 Notificaciones activadas correctamente!");
+          }
+        });
+      });
+    </script>
+
+    <script>
+      // Esperamos a que OneSignal esté listo
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        // Comprobamos si ya tiene bienvenida enviada
+        const bienvenidaEnviada = localStorage.getItem("bienvenidaEnviada");
+
+        // Escuchamos cambios de suscripción (cuando se activa OneSignal por primera vez)
+        OneSignal.User.PushSubscription.addEventListener("change", async function(sub) {
+          if (sub.id && !bienvenidaEnviada) {
+            try {
+              // Mostramos una notificación local de bienvenida 🎄
+              await OneSignal.Notifications.display(new OneSignal.Notification({
+                title: "La Magia de los Briceños 🎄",
+                body: "Gracias por unirte, pronto sabrás a quién te toca regalar 🎁"
+              }));
+
+              // Marcamos que ya se envió para que no se repita
+              localStorage.setItem("bienvenidaEnviada", "true");
+            } catch (e) {
+              console.error("Error al mostrar bienvenida:", e);
+            }
+          }
+        });
+      });
+    </script>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

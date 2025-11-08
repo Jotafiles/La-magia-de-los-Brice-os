@@ -1,0 +1,37 @@
+{
+  "name": "navidad-random",
+  "version": "1.0.0",
+  "description": "🎄 Sistema de Sorteo Familiar Navideño - Aplicación web festiva para sorteos de regalos tipo Amigo Secreto",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000 -o",
+    "dev": "npx live-server --port=8000",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "navidad",
+    "christmas",
+    "sorteo",
+    "amigo-secreto",
+    "regalo",
+    "familia",
+    "supabase"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/navidad-random.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/navidad-random/issues"
+  },
+  "homepage": "https://github.com/tu-usuario/navidad-random#readme"
+}
