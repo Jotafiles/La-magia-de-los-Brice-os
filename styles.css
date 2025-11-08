@@ -84,11 +84,13 @@ body {
 .app-container {
     position: relative;
     min-height: 100vh;
-    max-width: 480px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
     background: var(--color-bg);
     z-index: 2;
     padding-bottom: 80px;
+    overflow-x: hidden;
 }
 
 /* ============================================
@@ -96,9 +98,11 @@ body {
    ============================================ */
 .screen {
     display: none;
-    padding: 20px;
+    padding: 16px;
     min-height: 100vh;
     animation: fadeIn 0.4s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .screen.active {
@@ -121,7 +125,7 @@ body {
    ============================================ */
 .logo-container {
     text-align: center;
-    padding: 40px 20px 30px;
+    padding: 30px 16px 20px;
 }
 
 .gift-icon {
@@ -141,10 +145,11 @@ body {
 
 .main-title {
     font-family: var(--font-display);
-    font-size: 48px;
+    font-size: clamp(36px, 10vw, 48px);
     color: var(--color-primary);
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
 }
 
 .subtitle {
@@ -157,9 +162,11 @@ body {
 .register-card {
     background: var(--color-card);
     border-radius: var(--radius);
-    padding: 30px 20px;
+    padding: 24px 16px;
     box-shadow: var(--shadow-lg);
     margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .input-group {
@@ -331,9 +338,10 @@ body {
 
 .welcome-title {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: clamp(22px, 6vw, 28px);
     color: var(--color-primary);
     margin-bottom: 20px;
+    line-height: 1.3;
 }
 
 .countdown-card {
@@ -350,10 +358,11 @@ body {
 }
 
 .countdown-timer {
-    font-size: 32px;
+    font-size: clamp(24px, 7vw, 32px);
     font-weight: 800;
     color: var(--color-secondary);
     font-family: var(--font-display);
+    line-height: 1.2;
 }
 
 /* Tarjeta de Resultado Guardado */
@@ -486,10 +495,12 @@ body {
 .main-action-card {
     background: var(--color-card);
     border-radius: var(--radius-lg);
-    padding: 40px 20px;
+    padding: 30px 16px;
     text-align: center;
     box-shadow: var(--shadow-lg);
-    margin-top: 30px;
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .gift-box-animation {
@@ -497,7 +508,7 @@ body {
 }
 
 .gift-box {
-    font-size: 100px;
+    font-size: clamp(80px, 20vw, 100px);
     display: inline-block;
     animation: rotateGift 4s ease-in-out infinite;
 }
@@ -620,9 +631,10 @@ body {
 
 .reveal-title {
     font-family: var(--font-display);
-    font-size: 36px;
+    font-size: clamp(28px, 8vw, 36px);
     color: var(--color-primary);
     margin-bottom: 10px;
+    line-height: 1.2;
 }
 
 .reveal-subtitle {
@@ -672,9 +684,10 @@ body {
 
 .screen-header h2 {
     font-family: var(--font-display);
-    font-size: 32px;
+    font-size: clamp(26px, 7vw, 32px);
     color: var(--color-primary);
     margin-bottom: 10px;
+    line-height: 1.2;
 }
 
 .screen-subtitle {
@@ -896,15 +909,13 @@ body {
 .bottom-nav {
     position: fixed;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 480px;
+    left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-    padding: 12px 20px 20px;
+    padding: 12px 16px 16px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -1143,24 +1154,71 @@ body {
 /* ============================================
    RESPONSIVE
    ============================================ */
+/* Pantallas muy pequeñas */
 @media (max-width: 360px) {
-    .main-title {
-        font-size: 36px;
+    .screen {
+        padding: 12px;
+    }
+    
+    .logo-container {
+        padding: 20px 12px 16px;
+    }
+    
+    .login-card,
+    .register-card {
+        padding: 20px 12px;
     }
     
     .btn-huge {
         font-size: 18px;
-        padding: 20px;
+        padding: 18px;
     }
     
-    .countdown-timer {
-        font-size: 24px;
+    .gift-icon {
+        font-size: 60px;
+    }
+    
+    .nav-icon {
+        font-size: 20px;
+    }
+    
+    .nav-label {
+        font-size: 10px;
     }
 }
 
+/* Tablets y pantallas más grandes */
 @media (min-width: 481px) {
     .app-container {
+        max-width: 480px;
+        margin: 0 auto;
         border-left: 1px solid #E0E0E0;
         border-right: 1px solid #E0E0E0;
+    }
+    
+    .bottom-nav {
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 480px;
+    }
+}
+
+/* Landscape en móviles */
+@media (max-height: 600px) and (orientation: landscape) {
+    .logo-container {
+        padding: 20px 16px 16px;
+    }
+    
+    .gift-icon {
+        font-size: 60px;
+        margin-bottom: 10px;
+    }
+    
+    .main-action-card {
+        padding: 20px 16px;
+    }
+    
+    .gift-box {
+        font-size: 70px;
     }
 }
