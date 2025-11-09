@@ -5,8 +5,8 @@
 // ⚠️ IMPORTANTE: Reemplaza estos valores con tus credenciales de Supabase
 // Puedes obtenerlas en: https://supabase.com/dashboard/project/_/settings/api
 
-const SUPABASE_URL = 'https://wwljpmtzmgahapelhidl.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3bGpwbXR6bWdhaGFwZWxoaWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NDYxMTIsImV4cCI6MjA3ODEyMjExMn0.XhqQcKYurQ3BaiJ6w5qDwThA-OgqCO021SAH-t486q0';
+const SUPABASE_URL = 'https://kkunaeyytwrrvhgnjkme.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrdW5hZXl5dHdycnZoZ25qa21lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI2ODc1OTYsImV4cCI6MjA3ODI2MzU5Nn0.LNxUFT9cPTurhF1CY47QPPy_QnOgZW9eH0Z9DXo2mEY';
 
 // Crear cliente de Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

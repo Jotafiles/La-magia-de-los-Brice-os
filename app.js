@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Registrar event listeners
     registerEventListeners();
     
-    // Cargar notificaciones
-    loadNotifications();
+    // NO cargar notificaciones aquí para evitar doble carga
+    // Se cargarán cuando el usuario navegue a la pantalla de notificaciones
     
     // Iniciar countdown
     startChristmasCountdown();
@@ -137,8 +137,18 @@ async function register(name, email, password) {
             throw error;
         }
         
-        showToast('✅ ¡Registro exitoso! Ahora inicia sesión');
-        showScreen('loginScreen');
+        // Guardar sesión del nuevo usuario
+        AppState.currentUser = data;
+        AppState.isAdmin = data.role === 'admin';
+        localStorage.setItem('navidadRandomUser', JSON.stringify(data));
+        
+        // Marcar que debe ver la pantalla de bienvenida
+        localStorage.setItem('showWelcomeScreen', 'true');
+        
+        showToast('✅ ¡Registro exitoso! Bienvenido a la familia 🎄');
+        
+        // Mostrar pantalla de bienvenida
+        showWelcomeScreen();
         
     } catch (error) {
         showToast('❌ ' + error.message);
@@ -156,6 +166,50 @@ function logout() {
         showScreen('loginScreen');
         showToast('👋 Hasta luego, nos vemos en Navidad!');
     }
+}
+
+function showWelcomeScreen() {
+    // Crear pantalla de bienvenida
+    const welcomeScreen = document.createElement('div');
+    welcomeScreen.id = 'welcomeModal';
+    welcomeScreen.className = 'welcome-modal';
+    welcomeScreen.innerHTML = `
+        <div class="welcome-overlay"></div>
+        <div class="welcome-content">
+            <div class="welcome-sleigh-animation">
+                <div class="sleigh">🛷</div>
+                <div class="santa">🎅</div>
+            </div>
+            <h1 class="welcome-message-title">¡Bienvenido a la Familia Navideña! 🎄</h1>
+            <p class="welcome-message-text">
+                ¡Hola ${AppState.currentUser.name}! 🎉<br><br>
+                Te has unido a la magia de <strong>La Familia Briceño</strong>. 
+                Pronto se realizará el sorteo y descubrirás a quién le toca regalar esta Navidad.<br><br>
+                Prepárate para vivir momentos inolvidables llenos de sorpresas y alegría. 
+                ¡La magia de regalar comienza aquí! ✨🎁
+            </p>
+            <button class="btn-welcome" id="closeWelcomeBtn">
+                <span>🎄 ¡Entendido, vamos!</span>
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(welcomeScreen);
+    
+    // Agregar event listener al botón
+    document.getElementById('closeWelcomeBtn').addEventListener('click', () => {
+        welcomeScreen.classList.add('fade-out');
+        setTimeout(() => {
+            welcomeScreen.remove();
+            // Navegar al home después de cerrar
+            navigateToHome();
+        }, 500);
+    });
+    
+    // Mostrar con animación
+    setTimeout(() => {
+        welcomeScreen.classList.add('show');
+    }, 100);
 }
 
 // ============================================
