@@ -204,6 +204,11 @@ function navigateToHome() {
     loadUserDrawResult().then(() => {
         // Mostrar resultado guardado si existe
         displaySavedResult();
+        
+        // Agregar animación y badge al botón de regalo si el usuario no ha revelado
+        if (AppState.drawResult && !AppState.drawResult.revealed_at) {
+            addGiftNotificationBadge();
+        }
     });
     updateProfileInfo();
     updateAdminUI();
@@ -271,6 +276,9 @@ async function performDraw() {
         // Borrar sorteos anteriores
         await supabase.from('draw_results').delete().neq('id', '00000000-0000-0000-0000-000000000000');
         
+        // Limpiar localStorage de resultados guardados
+        localStorage.removeItem('navidadRandomSavedResult');
+        
         // Guardar resultados en la base de datos
         const { error: insertError } = await supabase
             .from('draw_results')
@@ -280,10 +288,21 @@ async function performDraw() {
         
         showToast('✅ ¡Sorteo realizado con éxito!');
         
+        // Mostrar notificación flotante visible
+        showFloatingNotification('¡El sorteo ha sido realizado! 🎉 Descubre a quién le toca regalar', '🎁');
+        
         // Enviar notificación global
         await createNotification('success', '🎉 ¡Sorteo Realizado!', 'El sorteo ha sido ejecutado. ¡Descubre a quién le toca regalar!', '🎁');
         
-        // Recargar datos
+        // Recargar datos del usuario y actualizar la vista
+        await loadUserDrawResult();
+        displaySavedResult();
+        
+        // Agregar animación y badge al botón de regalo si el usuario no ha revelado
+        if (AppState.drawResult && !AppState.drawResult.revealed_at) {
+            addGiftNotificationBadge();
+        }
+        
         loadParticipants();
         
     } catch (error) {
@@ -319,6 +338,9 @@ async function loadUserDrawResult() {
 }
 
 async function revealGift() {
+    // Quitar el badge de notificación al abrir el regalo
+    removeGiftNotificationBadge();
+    
     showScreen('giftScreen');
     
     // Mostrar estado de carga
@@ -361,11 +383,12 @@ async function revealGift() {
     
     // Hora de revelación
     const now = new Date();
-    document.getElementById('revealTime').textContent = now.toLocaleString('es-ES', {
+    document.getElementById('revealTime').textContent = now.toLocaleString('es-CL', {
         day: 'numeric',
         month: 'long',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
+        timeZone: 'America/Santiago'
     });
     
     // Efecto de confeti
@@ -384,6 +407,9 @@ async function revealGift() {
     
     // Guardar en localStorage para acceso rápido
     saveSavedResult();
+    
+    // Actualizar la vista del inicio para mostrar el resultado
+    displaySavedResult();
 }
 
 function displaySavedResult() {
@@ -411,11 +437,12 @@ function displaySavedResult() {
         
         // Fecha de revelación
         const revealDate = new Date(AppState.drawResult.revealed_at);
-        document.getElementById('savedDate').textContent = revealDate.toLocaleString('es-ES', {
+        document.getElementById('savedDate').textContent = revealDate.toLocaleString('es-CL', {
             day: 'numeric',
             month: 'long',
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            timeZone: 'America/Santiago'
         });
         
         // Guardar en localStorage
@@ -648,14 +675,24 @@ function createSnowEffect() {
     const container = document.getElementById('snowContainer');
     const snowflakes = ['❄', '❅', '❆'];
     
-    for (let i = 0; i < 50; i++) {
+    // Detectar si es móvil
+    const isMobile = window.innerWidth <= 768;
+    const snowflakeCount = isMobile ? 20 : 50; // Menos copos en móvil para mejor rendimiento
+    
+    for (let i = 0; i < snowflakeCount; i++) {
         const snowflake = document.createElement('div');
         snowflake.className = 'snowflake';
         snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
         snowflake.style.left = Math.random() * 100 + '%';
         snowflake.style.animationDuration = (Math.random() * 10 + 5) + 's';
         snowflake.style.animationDelay = Math.random() * 5 + 's';
-        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        
+        // Tamaño más grande en móvil para mejor visibilidad
+        const fontSize = isMobile 
+            ? (Math.random() * 8 + 14) + 'px'  // 14-22px en móvil
+            : (Math.random() * 10 + 10) + 'px'; // 10-20px en desktop
+        snowflake.style.fontSize = fontSize;
+        
         container.appendChild(snowflake);
     }
 }
@@ -701,6 +738,42 @@ function getTimeAgo(date) {
     if (seconds < 3600) return `Hace ${Math.floor(seconds / 60)} minutos`;
     if (seconds < 86400) return `Hace ${Math.floor(seconds / 3600)} horas`;
     return `Hace ${Math.floor(seconds / 86400)} días`;
+}
+
+function addGiftNotificationBadge() {
+    const giftBox = document.querySelector('.gift-box');
+    const mainActionCard = document.getElementById('mainActionCard');
+    
+    if (!giftBox || !mainActionCard) return;
+    
+    // Agregar clase de animación más intensa
+    giftBox.classList.add('gift-pulse');
+    mainActionCard.classList.add('card-highlight');
+    
+    // Crear badge de notificación si no existe
+    let badge = document.getElementById('giftNotificationBadge');
+    if (!badge) {
+        badge = document.createElement('div');
+        badge.id = 'giftNotificationBadge';
+        badge.className = 'gift-notification-badge';
+        badge.textContent = '!';
+        
+        const giftBoxAnimation = document.querySelector('.gift-box-animation');
+        if (giftBoxAnimation) {
+            giftBoxAnimation.style.position = 'relative';
+            giftBoxAnimation.appendChild(badge);
+        }
+    }
+}
+
+function removeGiftNotificationBadge() {
+    const giftBox = document.querySelector('.gift-box');
+    const mainActionCard = document.getElementById('mainActionCard');
+    const badge = document.getElementById('giftNotificationBadge');
+    
+    if (giftBox) giftBox.classList.remove('gift-pulse');
+    if (mainActionCard) mainActionCard.classList.remove('card-highlight');
+    if (badge) badge.remove();
 }
 
 function startChristmasCountdown() {
@@ -775,12 +848,20 @@ async function resetDraw() {
             .delete()
             .neq('id', '00000000-0000-0000-0000-000000000000');
         
+        // Limpiar localStorage de resultados guardados
+        localStorage.removeItem('navidadRandomSavedResult');
+        
         showToast('✅ Sorteo reiniciado con éxito');
+        
+        // Mostrar notificación flotante visible
+        showFloatingNotification('¡El sorteo ha sido reiniciado! 🔄', '🔄');
         
         // Enviar notificación
         await createNotification('warning', 'Sorteo Reiniciado', 'El administrador ha reiniciado el sorteo', '🔄');
         
-        // Recargar datos
+        // Recargar datos del usuario y actualizar la vista
+        await loadUserDrawResult();
+        displaySavedResult();
         loadParticipants();
         
     } catch (error) {
@@ -944,6 +1025,8 @@ function registerEventListeners() {
     // Volver a inicio desde regalo
     document.getElementById('backToHomeBtn')?.addEventListener('click', () => {
         showScreen('homeScreen');
+        // Actualizar la vista para mostrar el resultado guardado
+        displaySavedResult();
     });
     
     // Ejecutar sorteo (admin)
@@ -1022,8 +1105,15 @@ supabase
     .channel('draw-channel')
     .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'draw_results' },
-        () => {
-            loadUserDrawResult();
+        async () => {
+            await loadUserDrawResult();
+            displaySavedResult();
+            
+            // Agregar animación y badge al botón de regalo si el usuario no ha revelado
+            if (AppState.drawResult && !AppState.drawResult.revealed_at) {
+                addGiftNotificationBadge();
+            }
+            
             showFloatingNotification('¡El sorteo ha sido actualizado! 🎁', '🎉');
         }
     )
