@@ -43,19 +43,97 @@ document.addEventListener('DOMContentLoaded', () => {
 // GESTIÓN DE SESIÓN
 // ============================================
 
-function checkExistingSession() {
+async function checkExistingSession() {
     const savedUser = localStorage.getItem('navidadRandomUser');
     
     if (savedUser) {
         try {
-            AppState.currentUser = JSON.parse(savedUser);
-            AppState.isAdmin = AppState.currentUser.role === 'admin';
+            const user = JSON.parse(savedUser);
+            
+            // Verificar si el usuario todavía existe en la base de datos
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+            
+            if (error || !data) {
+                // Usuario no existe en la base de datos
+                console.log('Usuario eliminado de la base de datos');
+                forceLogout('Tu cuenta ha sido eliminada');
+                return;
+            }
+            
+            // Usuario existe, continuar con la sesión
+            AppState.currentUser = data;
+            AppState.isAdmin = data.role === 'admin';
+            
+            // Actualizar localStorage con datos frescos
+            localStorage.setItem('navidadRandomUser', JSON.stringify(data));
+            
             navigateToHome();
+            
+            // Iniciar verificación periódica
+            startUserVerification();
+            
         } catch (error) {
             console.error('Error al cargar sesión:', error);
             localStorage.removeItem('navidadRandomUser');
         }
     }
+}
+
+// Verificación periódica del usuario
+let verificationInterval = null;
+
+function startUserVerification() {
+    // Limpiar intervalo anterior si existe
+    if (verificationInterval) {
+        clearInterval(verificationInterval);
+    }
+    
+    // Verificar cada 30 segundos si el usuario todavía existe
+    verificationInterval = setInterval(async () => {
+        if (!AppState.currentUser) {
+            clearInterval(verificationInterval);
+            return;
+        }
+        
+        try {
+            const { data, error } = await supabase
+                .from('users')
+                .select('id')
+                .eq('id', AppState.currentUser.id)
+                .single();
+            
+            if (error || !data) {
+                // Usuario fue eliminado
+                clearInterval(verificationInterval);
+                forceLogout('Tu cuenta ha sido eliminada de la base de datos');
+            }
+        } catch (error) {
+            console.error('Error al verificar usuario:', error);
+        }
+    }, 30000); // Verificar cada 30 segundos
+}
+
+function forceLogout(message = 'Sesión cerrada') {
+    // Limpiar intervalo de verificación
+    if (verificationInterval) {
+        clearInterval(verificationInterval);
+        verificationInterval = null;
+    }
+    
+    // Limpiar todo
+    localStorage.removeItem('navidadRandomUser');
+    localStorage.removeItem('navidadRandomSavedResult');
+    AppState.currentUser = null;
+    AppState.isAdmin = false;
+    AppState.drawResult = null;
+    
+    // Volver al login
+    showScreen('loginScreen');
+    showToast('⚠️ ' + message);
 }
 
 async function login(email, password) {
@@ -85,6 +163,9 @@ async function login(email, password) {
         
         showToast('¡Bienvenido, ' + users.name + '! 🎄');
         navigateToHome();
+        
+        // Iniciar verificación periódica
+        startUserVerification();
         
         // Enviar notificación de conexión
         await createNotification('info', 'Nueva conexión', `${users.name} se ha conectado`, '👋');
@@ -158,6 +239,12 @@ async function register(name, email, password) {
 
 function logout() {
     if (confirm('¿Seguro que quieres cerrar sesión? 🎅')) {
+        // Limpiar intervalo de verificación
+        if (verificationInterval) {
+            clearInterval(verificationInterval);
+            verificationInterval = null;
+        }
+        
         localStorage.removeItem('navidadRandomUser');
         localStorage.removeItem('navidadRandomSavedResult');
         AppState.currentUser = null;
