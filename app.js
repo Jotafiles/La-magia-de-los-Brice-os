@@ -1210,32 +1210,38 @@ async function viewDrawResults() {
 // ÁRBOL FAMILIAR
 // ============================================
 
-// Mensajes bonitos SÚPER CHILENOS para cada familiar
+// Mensajes bonitos para cada familiar - bien escritos con acento chileno auténtico
 const chileanMessages = [
-    "Erí el más bacán de la familia, te queremos caleta po! 🎄",
-    "Erí la luz que ilumina nuestras navidades, compadre querido 🌟", 
-    "Con tu sonrisa hací que todo sea más bonito, wena! 😊",
-    "Erí el regalo más grande que tenemos, hermano del alma ❤️",
-    "Tu alegría es contagiosa po, nos hací felices a todos! 🎉",
-    "Erí la estrella que guía nuestra familia navideña, cachai ⭐",
-    "Con tu cariño hací que cada día sea especial, weon lindo 💝",
-    "Erí el corazón de nuestra familia, te amamos caleta 💖",
-    "Tu presencia es el mejor regalo de Navidad, en serio po 🎁",
-    "Erí la magia que hace brillar nuestro árbol, oye 🎄✨",
-    "Con tu amor hací que todo sea más hermoso, cachai 🌈",
-    "Erí la bendición más grande de nuestras vidas, weon 🙏",
-    "Tu risa es la melodía más linda de la Navidad po 🎵",
-    "Erí el ángel que cuida a toda la familia, en serio 👼",
-    "Con tu ternura hací que el mundo sea mejor, oye 🤗",
-    "Erí la esperanza que nos une en estas fiestas, cachai 🕯️",
-    "Tu bondad es el regalo que nunca se acaba po 💫",
-    "Erí la paz que necesitamos en Navidad, weon lindo ☮️",
-    "Con tu amor incondicional nos hací sentir especiales 💕",
-    "Erí la tradición más hermosa de nuestra familia po 🏠",
-    "Tení un corazón de oro, te queremos harto 💛",
-    "Erí la alegría de la casa, siempre nos hací reír 😄",
-    "Con vos las navidades son más bacanes, cachai 🎅",
-    "Erí el alma de la familia, no cambiés nunca po ✨"
+    "Eres el más bacán de la familia, te queremos caleta. 🎄",
+    "Eres la luz que ilumina nuestras navidades, compadre querido. 🌟", 
+    "Con tu sonrisa haces que todo sea más bonito. 😊",
+    "Eres el regalo más grande que tenemos, hermano del alma. ❤️",
+    "Tu alegría es contagiosa, nos haces felices a todos. 🎉",
+    "Eres la estrella que guía nuestra familia navideña. ⭐",
+    "Con tu cariño haces que cada día sea especial. 💝",
+    "Eres el corazón de nuestra familia, te amamos caleta. 💖",
+    "Tu presencia es el mejor regalo de Navidad. 🎁",
+    "Eres la magia que hace brillar nuestro árbol. 🎄✨",
+    "Con tu amor haces que todo sea más hermoso. 🌈",
+    "Eres la bendición más grande de nuestras vidas. 🙏",
+    "Tu risa es la melodía más linda de la Navidad. 🎵",
+    "Eres el ángel que cuida a toda la familia. 👼",
+    "Con tu ternura haces que el mundo sea mejor. 🤗",
+    "Eres la esperanza que nos une en estas fiestas. 🕯️",
+    "Tu bondad es el regalo que nunca se acaba. 💫",
+    "Eres la paz que necesitamos en Navidad. ☮️",
+    "Con tu amor incondicional nos haces sentir especiales. 💕",
+    "Eres la tradición más hermosa de nuestra familia. 🏠",
+    "Tienes un corazón de oro, te queremos harto. 💛",
+    "Eres la alegría de la casa, siempre nos haces reír. 😄",
+    "Contigo las navidades son más bacanes. 🎅",
+    "Eres el alma de la familia, no cambies nunca. ✨",
+    "Tu generosidad nos inspira a ser mejores personas. 🌟",
+    "Eres una bendición para todos nosotros. 🙌",
+    "Con tu alegría iluminas hasta los días más grises. 🌞",
+    "Eres el mejor ejemplo de amor y unión familiar. 👨‍👩‍👧‍👦",
+    "Tu presencia hace que cada momento sea inolvidable. ⏰",
+    "Eres la razón por la que esta familia es tan especial. 💖"
 ];
 
 let familyTreeData = [];
@@ -1747,11 +1753,11 @@ async function regenerateMessages() {
     try {
         showToast('✨ Regenerando mensajes...');
         
-        // Limpiar mensajes guardados
+        // Limpiar los mensajes guardados
         localStorage.removeItem('familyMessages');
         
-        // Recargar árbol familiar
-        await loadFamilyTree();
+        // Recargar constelación familiar
+        await loadFamilyConstellation();
         
         showToast('✅ ¡Mensajes regenerados con éxito!');
         
@@ -1848,23 +1854,33 @@ function registerEventListeners() {
         regenerateMessages();
     });
     
-    // Modal de esfera - cerrar
+    // Modal de estrella/esfera - cerrar
     document.getElementById('sphereModalClose')?.addEventListener('click', () => {
-        closeSphereModal();
+        // Usar función de constelación si está disponible
+        if (typeof closeStarModal === 'function') {
+            closeStarModal();
+        } else {
+            closeSphereModal();
+        }
     });
     
     document.getElementById('sphereModalOverlay')?.addEventListener('click', () => {
-        closeSphereModal();
+        // Usar función de constelación si está disponible
+        if (typeof closeStarModal === 'function') {
+            closeStarModal();
+        } else {
+            closeSphereModal();
+        }
     });
     
-    // Modal de esfera - reproducir voz
-    document.getElementById('playVoiceBtn')?.addEventListener('click', () => {
-        playVoiceMessage();
-    });
-    
-    // Modal de esfera - generar QR
+    // Modal de estrella - generar QR
     document.getElementById('generateQRBtn')?.addEventListener('click', () => {
-        generateQRCode();
+        // Usar la función de constelación si está disponible, sino la del árbol
+        if (typeof generateConstellationQR === 'function') {
+            generateConstellationQR();
+        } else {
+            generateQRCode();
+        }
     });
     
     // Cambiar tema
@@ -1886,7 +1902,7 @@ function registerEventListeners() {
                 
                 // Cargar datos según la pantalla
                 if (screen === 'participantsScreen') {
-                    loadFamilyTree();
+                    loadFamilyConstellation();
                 } else if (screen === 'notificationsScreen') {
                     loadNotifications();
                 } else if (screen === 'giftScreen') {

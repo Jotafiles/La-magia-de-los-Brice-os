@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#8B0000">
     <title>🎄 La Magia de los Briceños - Sorteo Familiar</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="constellation-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet">
@@ -190,18 +191,20 @@
             </div>
         </div>
 
-        <!-- PANTALLA ÁRBOL FAMILIAR -->
+        <!-- PANTALLA CONSTELACIÓN FAMILIAR -->
         <div id="participantsScreen" class="screen">
             <div class="screen-header">
-                <h2>🎄 Árbol Familiar</h2>
-                <p class="screen-subtitle">Nuestra familia navideña reunida</p>
+                <h2>✨ Constelación Familiar</h2>
+                <p class="screen-subtitle">Nuestra familia brilla en el cielo navideño</p>
             </div>
             
-            <!-- Contenedor del árbol navideño -->
-            <div class="family-tree-container" id="familyTreeContainer">
+            <!-- Contenedor de la constelación -->
+            <div class="constellation-container" id="familyTreeContainer">
+                <canvas id="constellationCanvas"></canvas>
+                <div class="stars-container" id="starsContainer"></div>
                 <div class="loading-participants">
-                    <div class="spinning-gift">🎄</div>
-                    <p>Preparando el árbol...</p>
+                    <div class="spinning-gift">⭐</div>
+                    <p>Iluminando las estrellas...</p>
                 </div>
             </div>
             
@@ -218,9 +221,6 @@
                         Mensaje bonito aquí...
                     </div>
                     <div class="sphere-modal-actions">
-                        <button class="btn-secondary" id="playVoiceBtn">
-                            <span>🔊 Escuchar Mensaje</span>
-                        </button>
                         <button class="btn-primary" id="generateQRBtn">
                             <span>📱 Generar QR</span>
                         </button>
@@ -507,6 +507,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="app.js"></script>
+    <script src="constellation.js"></script>
     <script src="features.js"></script>
 </body>
 </html>

@@ -2177,34 +2177,34 @@ body.dark-theme .nav-item.active .nav-label {
 }
 
 /* ============================================
-   ÁRBOL FAMILIAR
+   CONSTELACIÓN FAMILIAR - MOBILE FIRST
    ============================================ */
 
-.family-tree-container {
+.constellation-container {
     position: relative;
     width: 100%;
-    height: 80vh;
-    min-height: 700px;
+    height: 85vh;
+    min-height: 600px;
     background: 
-        radial-gradient(ellipse at center top, rgba(25, 25, 112, 0.4) 0%, transparent 60%),
-        radial-gradient(ellipse at center bottom, rgba(0, 100, 0, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 20%, rgba(25, 25, 112, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(75, 0, 130, 0.2) 0%, transparent 40%),
         linear-gradient(180deg, 
-            #0a0a1a 0%, 
-            #1a1a2e 20%, 
-            #16213e 40%, 
-            #0f1419 70%, 
-            #000000 100%
+            #0a0d1c 0%,
+            #131a2e 25%,
+            #0f1624 50%,
+            #0a0e18 75%,
+            #050810 100%
         );
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: 
         var(--shadow-lg),
-        inset 0 0 100px rgba(0, 0, 0, 0.5),
-        0 0 50px rgba(0, 255, 0, 0.1),
-        0 0 100px rgba(255, 215, 0, 0.05);
+        inset 0 0 120px rgba(0, 0, 0, 0.6),
+        0 0 60px rgba(100, 100, 255, 0.15);
     margin-bottom: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    animation: containerGlow 8s ease-in-out infinite alternate;
+    border: 1px solid rgba(100, 150, 255, 0.2);
+    animation: nightSkyGlow 10s ease-in-out infinite alternate;
+    touch-action: pan-y;
 }
 
 @keyframes containerGlow {
@@ -2665,8 +2665,9 @@ body.dark-theme .nav-item.active .nav-label {
 }
 
 .sphere-modal-actions button {
-    flex: 1;
-    max-width: 150px;
+    min-width: 200px;
+    padding: 16px 32px;
+    font-size: 16px;
 }
 
 /* Luces navideñas SÚPER LLAMATIVAS con efectos 3D */
