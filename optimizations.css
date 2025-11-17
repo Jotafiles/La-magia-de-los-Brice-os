@@ -1,0 +1,280 @@
+/* ============================================
+   OPTIMIZACIONES DE RENDIMIENTO
+   Mejoras para evitar lag y mejorar fluidez
+   ============================================ */
+
+/* GPU Acceleration - Mejora las animaciones */
+.family-star,
+.photo-card,
+.notification-item,
+.poll-card,
+.sphere-modal-content,
+.btn-primary,
+.btn-secondary {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Nav item SIN transform para no romper el position fixed del contenedor */
+.nav-item {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Mejorar scroll performance */
+.screen,
+.photos-grid,
+.notifications-list,
+.polls-list,
+.constellation-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* Optimizar transiciones - Reducir repaints */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Lazy loading - Placeholder para imágenes */
+img[data-src] {
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Contenedor con scroll optimizado */
+.optimized-scroll {
+    contain: layout style paint;
+    content-visibility: auto;
+}
+
+/* Reducir motion para usuarios con preferencias de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .snow-particle,
+    .christmas-lights,
+    .family-star {
+        animation: none !important;
+    }
+}
+
+/* Optimizar renderizado de texto */
+.card-title,
+.notification-title,
+.poll-title,
+.star-label {
+    text-rendering: optimizeSpeed;
+}
+
+/* Mejorar performance de sombras */
+.card,
+.photo-card,
+.poll-card {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+/* Bottom nav DEBE estar fijo sin transforms que rompan el position fixed */
+.bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+    /* NO usar transform aquí - rompe position fixed */
+}
+
+/* Pantallas con padding-bottom para compensar el menú fijo */
+.screen {
+    padding-bottom: 100px !important; /* Espacio para el menú inferior */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Contenedor de app sin transform que pueda afectar position fixed */
+.app-container {
+    position: relative;
+    /* NO usar transform aquí */
+}
+
+/* Cache de capas solo para screen-header */
+.screen-header {
+    position: -webkit-sticky;
+    position: sticky;
+    transform: translateZ(0);
+}
+
+/* Optimización de Canvas */
+#constellationCanvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* Reducir complejidad visual en dispositivos lentos */
+@media (max-width: 480px) {
+    .christmas-lights {
+        display: none; /* Ocultar en móviles muy pequeños */
+    }
+    
+    .snow-particle:nth-child(n+16) {
+        display: none; /* Solo 15 partículas en móviles */
+    }
+    
+    .constellation-container {
+        filter: none; /* Remover filtros pesados */
+    }
+}
+
+/* Optimización de fuentes - aplicar a fuentes existentes */
+.screen,
+body,
+button,
+input {
+    font-display: swap; /* Mejora carga de fuentes */
+}
+
+/* Prevenir layout shift */
+img {
+    aspect-ratio: attr(width) / attr(height);
+}
+
+/* Skeleton loader para mejor UX */
+.loading-skeleton {
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.05) 25%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: var(--radius);
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Optimizar hover states */
+@media (hover: hover) {
+    .family-star:hover,
+    .photo-card:hover,
+    .btn-primary:hover {
+        transition: transform 0.2s ease;
+    }
+}
+
+/* Reducir blur en móviles para mejor performance */
+@media (max-width: 768px) {
+    .sphere-modal-overlay {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    
+    .sphere-modal-content {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+}
+
+/* Contenedor de lista virtual */
+.virtual-list {
+    overflow-y: auto;
+    position: relative;
+    height: 100%;
+}
+
+.virtual-list-spacer {
+    pointer-events: none;
+}
+
+/* Optimización de modales */
+.modal,
+.sphere-modal {
+    contain: layout style;
+}
+
+/* Smooth scroll para navegación */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Optimizar animaciones de entrada */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Cursor pointer solo donde sea necesario */
+button,
+a,
+.family-star,
+.photo-card,
+.nav-item {
+    cursor: pointer;
+}
+
+/* Optimización de z-index */
+.bottom-nav { z-index: 100; }
+.sphere-modal { z-index: 1000; }
+.toast { z-index: 2000; }
+.welcome-modal { z-index: 3000; }
+
+/* Performance hint para el navegador */
+.performance-critical {
+    contain: strict;
+    content-visibility: auto;
+}
+
+/* Reducir reflows en scroll */
+.fixed-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-bg);
+}
+
+/* Optimización de gradientes */
+.gradient-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Touch feedback optimizado */
+@media (hover: none) {
+    .family-star:active,
+    .photo-card:active,
+    .btn-primary:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+}

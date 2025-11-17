@@ -270,6 +270,11 @@ function logout() {
             verificationInterval = null;
         }
         
+        // 🔴 Limpiar subscripciones de Realtime
+        if (typeof cleanupRealtime === 'function') {
+            cleanupRealtime();
+        }
+        
         localStorage.removeItem('navidadRandomUser');
         localStorage.removeItem('navidadRandomSavedResult');
         AppState.currentUser = null;
@@ -363,6 +368,11 @@ function navigateToHome() {
     // Mostrar indicador de admin
     if (AppState.isAdmin) {
         document.getElementById('userName').innerHTML += ' <span style="background: linear-gradient(135deg, #6A1B9A, #8E24AA); color: white; padding: 2px 8px; border-radius: 8px; font-size: 12px; margin-left: 8px;">👑 ADMIN</span>';
+    }
+    
+    // 🔴 Inicializar Realtime - Actualizaciones automáticas
+    if (typeof initializeRealtime === 'function') {
+        initializeRealtime();
     }
     
     // Cargar datos
