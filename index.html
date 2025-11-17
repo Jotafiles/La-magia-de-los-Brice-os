@@ -17,6 +17,17 @@
     <!-- Efecto de nieve de fondo -->
     <div class="snow-container" id="snowContainer"></div>
     
+    <!-- Luces navideñas colgantes -->
+    <div class="christmas-lights"></div>
+    
+    <!-- Decoración navideña adicional -->
+    <div class="christmas-decorations">
+        <div class="corner-decoration top-left">🎄</div>
+        <div class="corner-decoration top-right">⭐</div>
+        <div class="corner-decoration bottom-left">🎁</div>
+        <div class="corner-decoration bottom-right">🔔</div>
+    </div>
+    
     <!-- Contenedor principal -->
     <div class="app-container">
         
@@ -94,6 +105,16 @@
                 </div>
             </div>
             
+            <!-- Mensaje Especial del Administrador -->
+            <div id="adminMessageCard" class="admin-message-card hidden">
+                <div class="admin-message-header">
+                    <span class="admin-message-icon">📢</span>
+                    <h3>Mensaje Especial</h3>
+                </div>
+                <p id="adminMessageText" class="admin-message-text"></p>
+                <p class="admin-message-author">— <span id="adminMessageAuthor"></span></p>
+            </div>
+            
             <!-- Tarjeta de Resultado Guardado (se muestra si ya reveló) -->
             <div id="savedResultCard" class="saved-result-card hidden">
                 <div class="saved-result-header">
@@ -169,17 +190,41 @@
             </div>
         </div>
 
-        <!-- PANTALLA DE PARTICIPANTES -->
+        <!-- PANTALLA ÁRBOL FAMILIAR -->
         <div id="participantsScreen" class="screen">
             <div class="screen-header">
-                <h2>👨‍👩‍👧‍👦 Familia Participante</h2>
-                <p class="screen-subtitle">Todos los que se unieron al sorteo</p>
+                <h2>🎄 Árbol Familiar</h2>
+                <p class="screen-subtitle">Nuestra familia navideña reunida</p>
             </div>
             
-            <div class="participants-list" id="participantsList">
+            <!-- Contenedor del árbol navideño -->
+            <div class="family-tree-container" id="familyTreeContainer">
                 <div class="loading-participants">
                     <div class="spinning-gift">🎄</div>
-                    <p>Cargando familia...</p>
+                    <p>Preparando el árbol...</p>
+                </div>
+            </div>
+            
+            <!-- Modal de esfera (detalles del familiar) -->
+            <div id="sphereModal" class="sphere-modal hidden">
+                <div class="sphere-modal-overlay" id="sphereModalOverlay"></div>
+                <div class="sphere-modal-content">
+                    <button class="sphere-modal-close" id="sphereModalClose">×</button>
+                    <div class="sphere-modal-header">
+                        <div class="sphere-modal-avatar" id="sphereModalAvatar">🎅</div>
+                        <h3 id="sphereModalName">Nombre</h3>
+                    </div>
+                    <div class="sphere-modal-message" id="sphereModalMessage">
+                        Mensaje bonito aquí...
+                    </div>
+                    <div class="sphere-modal-actions">
+                        <button class="btn-secondary" id="playVoiceBtn">
+                            <span>🔊 Escuchar Mensaje</span>
+                        </button>
+                        <button class="btn-primary" id="generateQRBtn">
+                            <span>📱 Generar QR</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             
@@ -195,6 +240,10 @@
                 
                 <button class="btn-admin" id="viewResultsBtn" style="background: linear-gradient(135deg, #0277BD, #0288D1);">
                     <span>👀 Ver Todos los Resultados</span>
+                </button>
+                
+                <button class="btn-admin" id="regenerateMessagesBtn" style="background: linear-gradient(135deg, #7B1FA2, #9C27B0);">
+                    <span>✨ Regenerar Mensajes</span>
                 </button>
             </div>
         </div>
@@ -219,6 +268,99 @@
                 <button class="btn-danger" id="deleteNotificationsBtn">
                     <span>🗑️ Borrar Todas las Notificaciones</span>
                 </button>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE GALERÍA DE FOTOS -->
+        <div id="galleryScreen" class="screen">
+            <div class="screen-header">
+                <h2>📸 Galería — Fotos Navideñas</h2>
+                <p class="screen-subtitle">Comparte tus momentos navideños</p>
+            </div>
+            
+            <!-- Aviso de moderación -->
+            <div class="gallery-warning">
+                <span class="warning-icon">⚠️</span>
+                <p>Sube solo fotos navideñas (árbol, decoración, cenas navideñas, disfraces, etc.). Las fotos no navideñas pueden ser eliminadas por moderación automática o por admin.</p>
+            </div>
+            
+            <!-- Formulario de subida -->
+            <div class="upload-card">
+                <h3>📤 Subir Nueva Foto</h3>
+                <div class="input-group">
+                    <label for="photoFile">🖼️ Seleccionar Foto</label>
+                    <input type="file" id="photoFile" accept="image/*" capture="environment">
+                </div>
+                <div class="input-group">
+                    <label for="photoCaption">✍️ Descripción (opcional)</label>
+                    <textarea id="photoCaption" placeholder="Describe tu foto navideña..." rows="2"></textarea>
+                </div>
+                <button class="btn-primary" id="uploadPhotoBtn">
+                    <span>🎄 Subir Foto</span>
+                </button>
+            </div>
+            
+            <!-- Grid de fotos -->
+            <div class="photos-grid" id="photosGrid">
+                <div class="loading-participants">
+                    <div class="spinning-gift">📸</div>
+                    <p>Cargando fotos...</p>
+                </div>
+            </div>
+            
+            <!-- Botones de admin -->
+            <div class="admin-only hidden" style="margin-top: 20px;">
+                <button class="btn-danger" id="deleteAllPhotosBtn">
+                    <span>🗑️ Borrar Todas las Fotos</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE VOTACIONES -->
+        <div id="pollsScreen" class="screen">
+            <div class="screen-header">
+                <h2>🗳️ Votaciones Familiares</h2>
+                <p class="screen-subtitle">Participa en las encuestas</p>
+            </div>
+            
+            <!-- Formulario de creación (solo admin) -->
+            <div class="admin-only hidden">
+                <div class="create-poll-card">
+                    <h3>➕ Crear Nueva Encuesta</h3>
+                    <div class="input-group">
+                        <label for="pollTitle">📝 Título</label>
+                        <input type="text" id="pollTitle" placeholder="Ej: ¿Qué postre preferimos?">
+                    </div>
+                    <div class="input-group">
+                        <label for="pollDescription">📄 Descripción</label>
+                        <textarea id="pollDescription" placeholder="Detalles de la encuesta..." rows="2"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="pollOptions">📋 Opciones (una por línea)</label>
+                        <textarea id="pollOptions" placeholder="Opción 1&#10;Opción 2&#10;Opción 3" rows="4"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="pollDeadline">📅 Fecha límite</label>
+                        <input type="datetime-local" id="pollDeadline">
+                    </div>
+                    <div class="input-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="pollMultipleChoice">
+                            <span>Permitir selección múltiple</span>
+                        </label>
+                    </div>
+                    <button class="btn-primary" id="createPollBtn">
+                        <span>🗳️ Crear Encuesta</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Lista de encuestas -->
+            <div class="polls-list" id="pollsList">
+                <div class="loading-participants">
+                    <div class="spinning-gift">🗳️</div>
+                    <p>Cargando encuestas...</p>
+                </div>
             </div>
         </div>
 
@@ -258,6 +400,25 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Gestión de Mensaje Especial -->
+                <div class="admin-panel" style="margin-top: 20px;">
+                    <h3 style="text-align: center; color: var(--color-primary); margin-bottom: 20px;">
+                        📢 Mensaje Especial
+                    </h3>
+                    <div class="input-group">
+                        <label for="adminMessageInput">✍️ Mensaje Navideño</label>
+                        <textarea id="adminMessageInput" placeholder="Escribe un mensaje especial para la familia..." rows="4"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="btn-primary" id="saveAdminMessageBtn" style="flex: 1;">
+                            <span>💾 Guardar Mensaje</span>
+                        </button>
+                        <button class="btn-danger" id="deleteAdminMessageBtn" style="flex: 1;">
+                            <span>🗑️ Borrar Mensaje</span>
+                        </button>
+                    </div>
+                </div>
             </div>
             
             <div class="profile-actions">
@@ -279,18 +440,18 @@
             </button>
             
             <button class="nav-item" data-screen="participantsScreen">
-                <span class="nav-icon">👨‍👩‍👧‍👦</span>
-                <span class="nav-label">Familia</span>
+                <span class="nav-icon">🎄</span>
+                <span class="nav-label">Árbol</span>
             </button>
             
-            <button class="nav-item nav-item-main" data-screen="giftScreen">
-                <span class="nav-icon-main">🎁</span>
+            <button class="nav-item" data-screen="galleryScreen">
+                <span class="nav-icon">📸</span>
+                <span class="nav-label">Fotos</span>
             </button>
             
-            <button class="nav-item" data-screen="notificationsScreen">
-                <span class="nav-icon">🔔</span>
-                <span class="nav-label">Alertas</span>
-                <span class="notification-badge hidden" id="notificationBadge">0</span>
+            <button class="nav-item" data-screen="pollsScreen">
+                <span class="nav-icon">🗳️</span>
+                <span class="nav-label">Votar</span>
             </button>
             
             <button class="nav-item" data-screen="profileScreen">
@@ -346,5 +507,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="app.js"></script>
+    <script src="features.js"></script>
 </body>
 </html>

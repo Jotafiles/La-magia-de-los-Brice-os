@@ -2,24 +2,27 @@
    VARIABLES Y RESET
    ============================================ */
 :root {
-    --color-primary: #8B0000;
-    --color-secondary: #1B5E20;
-    --color-accent: #DAA520;
-    --color-bg: #FFF8F0;
-    --color-bg-dark: #2C1810;
-    --color-card: #FFFFFF;
-    --color-text: #2D2D2D;
-    --color-text-light: #666666;
-    --color-success: #2E7D32;
+    --color-primary: #C41E3A;
+    --color-secondary: #0F7B3E;
+    --color-accent: #FFD700;
+    --color-bg: linear-gradient(135deg, #1a0e0e 0%, #2d1b1b 50%, #1a0e0e 100%);
+    --color-bg-solid: #1a0e0e;
+    --color-card: rgba(45, 27, 27, 0.95);
+    --color-text: #F5F5F5;
+    --color-text-light: #C0C0C0;
+    --color-success: #0F7B3E;
     --color-danger: #C62828;
-    --color-warning: #F57C00;
+    --color-warning: #FFD700;
     
     --font-primary: 'Poppins', sans-serif;
     --font-display: 'Mountains of Christmas', cursive;
     
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --shadow-glow-red: 0 0 20px rgba(196, 30, 58, 0.5);
+    --shadow-glow-green: 0 0 20px rgba(15, 123, 62, 0.5);
+    --shadow-glow-gold: 0 0 20px rgba(255, 215, 0, 0.5);
     
     --radius: 20px;
     --radius-sm: 12px;
@@ -214,11 +217,36 @@ body.dark-theme label {
 
 body {
     font-family: var(--font-primary);
-    background: var(--color-bg);
+    background: #0a0505;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(196, 30, 58, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(15, 123, 62, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+        linear-gradient(135deg, #0a0505 0%, #1a0e0e 25%, #2d1b1b 50%, #1a0e0e 75%, #0a0505 100%);
     color: var(--color-text);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(196, 30, 58, 0.02) 2px,
+            rgba(196, 30, 58, 0.02) 4px
+        );
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* ============================================
@@ -354,11 +382,29 @@ body {
 
 .main-title {
     font-family: var(--font-display);
-    font-size: clamp(36px, 10vw, 48px);
-    color: var(--color-primary);
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: clamp(40px, 11vw, 56px);
+    background: linear-gradient(135deg, 
+        #FFD700 0%, 
+        #FF4757 25%,
+        #C41E3A 50%, 
+        #0F7B3E 75%,
+        #FFD700 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 15px;
     line-height: 1.2;
+    font-weight: 900;
+    letter-spacing: 2px;
+    animation: gradientShift 5s ease infinite;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3))
+            drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .subtitle {
@@ -369,17 +415,48 @@ body {
 
 .login-card,
 .register-card {
-    background: var(--color-card);
+    background: linear-gradient(135deg, rgba(45, 27, 27, 0.98), rgba(35, 20, 20, 0.98));
     border-radius: var(--radius);
-    padding: 24px 16px;
-    box-shadow: var(--shadow-lg);
+    padding: 30px 20px;
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 40px rgba(196, 30, 58, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin-top: 20px;
     width: 100%;
     box-sizing: border-box;
+    border: 1px solid rgba(196, 30, 58, 0.3);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before,
+.register-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
 }
 
 .input-group {
     margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .input-group label {
@@ -388,23 +465,44 @@ body {
     font-weight: 600;
     color: var(--color-text);
     margin-bottom: 8px;
+    position: relative;
+    z-index: 2;
 }
 
-.input-group input {
+.input-group input,
+.input-group textarea {
     width: 100%;
-    padding: 15px;
-    border: 2px solid #E0E0E0;
+    padding: 15px 18px;
+    border: 2px solid rgba(196, 30, 58, 0.2);
     border-radius: var(--radius-sm);
     font-size: 16px;
     font-family: var(--font-primary);
     transition: all 0.3s ease;
-    background: var(--color-bg);
+    background: rgba(10, 5, 5, 0.6);
+    color: var(--color-text);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.input-group input:focus {
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: rgba(192, 192, 192, 0.5);
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.1);
+    background: rgba(10, 5, 5, 0.8);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 0 4px rgba(196, 30, 58, 0.2),
+        0 0 20px rgba(196, 30, 58, 0.3);
+    transform: translateY(-1px);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 80px;
 }
 
 /* ============================================
@@ -430,37 +528,113 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--color-primary), #A50000);
+    background: linear-gradient(135deg, #C41E3A 0%, #8B0000 50%, #C41E3A 100%);
+    background-size: 200% 100%;
     color: white;
+    box-shadow: 
+        0 8px 24px rgba(196, 30, 58, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 12px 32px rgba(196, 30, 58, 0.6),
+        0 0 30px rgba(196, 30, 58, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background-position: 100% 0;
+}
+
+.btn-primary:hover::before {
+    opacity: 1;
 }
 
 .btn-primary:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
 }
 
 .btn-secondary {
-    background: linear-gradient(135deg, var(--color-secondary), #2E7D32);
+    background: linear-gradient(135deg, #0F7B3E 0%, #2E7D32 50%, #0F7B3E 100%);
+    background-size: 200% 100%;
     color: white;
+    box-shadow: 
+        0 8px 24px rgba(15, 123, 62, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 12px 32px rgba(15, 123, 62, 0.6),
+        0 0 30px rgba(15, 123, 62, 0.4);
+    background-position: 100% 0;
 }
 
 .btn-danger {
-    background: linear-gradient(135deg, var(--color-danger), #D32F2F);
+    background: linear-gradient(135deg, #C62828 0%, #D32F2F 50%, #C62828 100%);
+    background-size: 200% 100%;
     color: white;
+    box-shadow: 
+        0 8px 24px rgba(198, 40, 40, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 12px 32px rgba(198, 40, 40, 0.6),
+        0 0 30px rgba(198, 40, 40, 0.4);
+    background-position: 100% 0;
 }
 
 .btn-huge {
     padding: 24px;
     font-size: 20px;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--color-accent), #FFD700);
-    color: var(--color-bg-dark);
-    box-shadow: 0 8px 32px rgba(218, 165, 32, 0.4);
-    animation: pulse 2s infinite;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+    background-size: 200% 100%;
+    color: #1a0e0e;
+    box-shadow: 
+        0 12px 40px rgba(255, 215, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite, buttonGlow 3s ease-in-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-weight: 800;
+}
+
+.btn-huge:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 
+        0 16px 48px rgba(255, 215, 0, 0.7),
+        0 0 60px rgba(255, 215, 0, 0.5);
+    background-position: 100% 0;
+}
+
+@keyframes buttonGlow {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.15);
+    }
 }
 
 @keyframes pulse {
@@ -515,26 +689,176 @@ body {
 }
 
 /* ============================================
-   LUCES NAVIDEÑAS
+   LUCES NAVIDEÑAS COLGANTES
    ============================================ */
 .christmas-lights {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 40px;
-    background: linear-gradient(
-        90deg,
-        #FF0000 0%, #00FF00 25%, #0000FF 50%, #FFFF00 75%, #FF0000 100%
-    );
-    opacity: 0.3;
-    z-index: 0;
-    animation: lightMove 3s linear infinite;
+    height: 80px;
+    z-index: 10;
+    pointer-events: none;
+    overflow: hidden;
 }
 
-@keyframes lightMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+/* Cable de las luces */
+.christmas-lights::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #2a2a2a;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Crear luces individuales con CSS puro */
+.christmas-lights::after {
+    content: '🔴🟡🔵🟢🟣🔴🟠🟡🔵🟢🔴🟣🟡🔵🟠🟢🔴🟡🔵🟣🟢🔴🟠🟡🔵🟢🟣🔴🟡🔵';
+    position: absolute;
+    top: 7px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+    letter-spacing: 15px;
+    animation: lightsGlow 2s ease-in-out infinite alternate,
+               lightsSwing 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))
+            drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes lightsGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))
+                drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))
+                brightness(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9))
+                drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))
+                brightness(1.3);
+    }
+}
+
+@keyframes lightsSwing {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(2px) rotate(1deg);
+    }
+    75% {
+        transform: translateY(2px) rotate(-1deg);
+    }
+}
+
+/* Resplandor adicional */
+.christmas-lights {
+    background: linear-gradient(
+        180deg,
+        rgba(196, 30, 58, 0.1) 0%,
+        rgba(15, 123, 62, 0.1) 33%,
+        rgba(66, 165, 245, 0.1) 66%,
+        transparent 100%
+    );
+}
+
+@media (max-width: 768px) {
+    .christmas-lights {
+        height: 60px;
+    }
+    
+    .christmas-lights::after {
+        font-size: 16px;
+        letter-spacing: 8px;
+    }
+}
+
+/* ============================================
+   DECORACIONES NAVIDEÑAS DE ESQUINA
+   ============================================ */
+.christmas-decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.corner-decoration {
+    position: fixed;
+    font-size: 48px;
+    animation: decorationFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5))
+            drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+}
+
+.corner-decoration.top-left {
+    top: 90px;
+    left: 20px;
+    animation-delay: 0s;
+}
+
+.corner-decoration.top-right {
+    top: 90px;
+    right: 20px;
+    animation-delay: 0.5s;
+}
+
+.corner-decoration.bottom-left {
+    bottom: 100px;
+    left: 20px;
+    animation-delay: 1s;
+}
+
+.corner-decoration.bottom-right {
+    bottom: 100px;
+    right: 20px;
+    animation-delay: 1.5s;
+}
+
+@keyframes decorationFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+    75% {
+        transform: translateY(-10px) rotate(-5deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .corner-decoration {
+        font-size: 32px;
+    }
+    
+    .corner-decoration.top-left,
+    .corner-decoration.top-right {
+        top: 70px;
+    }
+    
+    .corner-decoration.bottom-left,
+    .corner-decoration.bottom-right {
+        bottom: 80px;
+    }
+    
+    .corner-decoration.top-left,
+    .corner-decoration.bottom-left {
+        left: 10px;
+    }
+    
+    .corner-decoration.top-right,
+    .corner-decoration.bottom-right {
+        right: 10px;
+    }
 }
 
 /* ============================================
@@ -547,17 +871,45 @@ body {
 
 .welcome-title {
     font-family: var(--font-display);
-    font-size: clamp(22px, 6vw, 28px);
-    color: var(--color-primary);
+    font-size: clamp(26px, 7vw, 34px);
+    background: linear-gradient(135deg, #FF4757 0%, #C41E3A 50%, #8B0000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 20px;
     line-height: 1.3;
+    text-shadow: 0 2px 10px rgba(196, 30, 58, 0.3);
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
 .countdown-card {
-    background: var(--color-card);
+    background: linear-gradient(135deg, rgba(45, 27, 27, 0.95), rgba(35, 20, 20, 0.95));
     border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: var(--shadow-md);
+    padding: 25px;
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 30px rgba(255, 215, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.countdown-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .countdown-label {
@@ -702,24 +1054,72 @@ body {
 }
 
 .main-action-card {
-    background: var(--color-card);
+    background: linear-gradient(135deg, rgba(45, 27, 27, 0.95), rgba(35, 20, 20, 0.95));
     border-radius: var(--radius-lg);
-    padding: 30px 16px;
+    padding: 40px 20px;
     text-align: center;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 40px rgba(196, 30, 58, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin-top: 20px;
     width: 100%;
     box-sizing: border-box;
+    border: 2px solid rgba(196, 30, 58, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.main-action-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 30% 50%, rgba(196, 30, 58, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 50%, rgba(15, 123, 62, 0.1) 0%, transparent 50%);
+    animation: rotate 15s linear infinite;
+}
+
+.main-action-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        transparent,
+        rgba(255, 215, 0, 0.5),
+        transparent);
+    animation: shimmerLine 2s ease-in-out infinite;
+}
+
+@keyframes shimmerLine {
+    0%, 100% { opacity: 0.3; transform: translateX(-100%); }
+    50% { opacity: 1; transform: translateX(100%); }
 }
 
 .gift-box-animation {
     margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 .gift-box {
     font-size: clamp(80px, 20vw, 100px);
     display: inline-block;
     animation: rotateGift 4s ease-in-out infinite;
+    filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.4));
+}
+
+.main-action-card h2,
+.main-action-card p,
+.main-action-card .btn-huge {
+    position: relative;
+    z-index: 2;
 }
 
 @keyframes rotateGift {
@@ -1773,5 +2173,1287 @@ body.dark-theme .nav-item.active .nav-label {
     
     .welcome-message-text {
         font-size: 15px;
+    }
+}
+
+/* ============================================
+   ÁRBOL FAMILIAR
+   ============================================ */
+
+.family-tree-container {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    min-height: 700px;
+    background: 
+        radial-gradient(ellipse at center top, rgba(25, 25, 112, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at center bottom, rgba(0, 100, 0, 0.2) 0%, transparent 50%),
+        linear-gradient(180deg, 
+            #0a0a1a 0%, 
+            #1a1a2e 20%, 
+            #16213e 40%, 
+            #0f1419 70%, 
+            #000000 100%
+        );
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 
+        var(--shadow-lg),
+        inset 0 0 100px rgba(0, 0, 0, 0.5),
+        0 0 50px rgba(0, 255, 0, 0.1),
+        0 0 100px rgba(255, 215, 0, 0.05);
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: containerGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes containerGlow {
+    0% {
+        box-shadow: 
+            var(--shadow-lg),
+            inset 0 0 100px rgba(0, 0, 0, 0.5),
+            0 0 50px rgba(0, 255, 0, 0.1),
+            0 0 100px rgba(255, 215, 0, 0.05);
+    }
+    100% {
+        box-shadow: 
+            var(--shadow-lg),
+            inset 0 0 100px rgba(0, 0, 0, 0.5),
+            0 0 80px rgba(0, 255, 0, 0.2),
+            0 0 150px rgba(255, 215, 0, 0.1);
+    }
+}
+
+/* Árbol navideño realista con CSS - MÁS GRANDE Y 3D */
+.christmas-tree {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) perspective(1000px) rotateX(5deg);
+    z-index: 1;
+    width: 800px;
+    height: 600px;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
+}
+
+/* Tronco del árbol - BIEN POSICIONADO */
+.christmas-tree::before {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 120px;
+    background: 
+        linear-gradient(90deg, transparent 0%, rgba(139, 69, 19, 0.3) 20%, transparent 40%),
+        linear-gradient(180deg, #A0522D 0%, #8B4513 30%, #654321 70%, #3E2723 100%);
+    border-radius: 10px;
+    box-shadow: 
+        inset -10px 0 20px rgba(0, 0, 0, 0.4),
+        inset 10px 0 20px rgba(160, 82, 45, 0.3),
+        0 10px 30px rgba(0, 0, 0, 0.6);
+    z-index: 0;
+}
+
+/* Capas del árbol - BIEN ACOMODADAS CON EFECTOS 3D */
+.tree-layer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateZ(0px);
+    border-style: solid;
+    border-color: transparent transparent #1B5E20 transparent;
+    filter: 
+        drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6))
+        drop-shadow(0 0 40px rgba(27, 94, 32, 0.4))
+        drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    transform-style: preserve-3d;
+}
+
+/* Capa superior - MÁS GRANDE */
+.tree-layer:nth-child(1) {
+    bottom: 420px;
+    border-width: 0 120px 180px 120px;
+    border-bottom-color: #4CAF50;
+    z-index: 4;
+    animation: treeLayerSway 6s ease-in-out infinite;
+    animation-delay: 0s;
+}
+
+/* Capa media superior - MÁS GRANDE */
+.tree-layer:nth-child(2) {
+    bottom: 320px;
+    border-width: 0 170px 200px 170px;
+    border-bottom-color: #388E3C;
+    z-index: 3;
+    animation: treeLayerSway 6s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+/* Capa media - MÁS GRANDE */
+.tree-layer:nth-child(3) {
+    bottom: 210px;
+    border-width: 0 220px 230px 220px;
+    border-bottom-color: #2E7D32;
+    z-index: 2;
+    animation: treeLayerSway 6s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+/* Capa inferior - MÁS GRANDE */
+.tree-layer:nth-child(4) {
+    bottom: 90px;
+    border-width: 0 270px 250px 270px;
+    border-bottom-color: #1B5E20;
+    z-index: 1;
+    animation: treeLayerSway 6s ease-in-out infinite;
+    animation-delay: 3s;
+}
+
+/* Animación suave de las capas del árbol */
+@keyframes treeLayerSway {
+    0%, 100% { 
+        transform: translateX(-50%) rotate(0deg);
+    }
+    50% { 
+        transform: translateX(-50%) rotate(1deg);
+    }
+}
+
+/* Estrella en la punta - AJUSTADA AL ÁRBOL GRANDE */
+.tree-star {
+    position: absolute;
+    bottom: 580px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 120px;
+    color: #FFD700;
+    text-shadow: 
+        0 0 50px #FFD700,
+        0 0 100px #FFA500,
+        0 0 150px #FF8C00,
+        0 0 200px #FF4500;
+    animation: starTwinkle 3s ease-in-out infinite alternate;
+    z-index: 10;
+    filter: drop-shadow(0 0 40px #FFD700);
+}
+
+@keyframes starTwinkle {
+    0% { 
+        transform: translateX(-50%) scale(1) rotate(0deg);
+        text-shadow: 
+            0 0 20px #FFD700,
+            0 0 40px #FFA500,
+            0 0 60px #FF8C00;
+    }
+    100% { 
+        transform: translateX(-50%) scale(1.1) rotate(5deg);
+        text-shadow: 
+            0 0 30px #FFD700,
+            0 0 50px #FFA500,
+            0 0 70px #FF8C00,
+            0 0 90px #FF4500;
+    }
+}
+
+/* Esferas navideñas ultra realistas 3D - TAMAÑO AJUSTADO */
+.family-sphere {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.1;
+    padding: 6px;
+    animation: sphereFloat 6s ease-in-out infinite;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+}
+
+/* Efecto de brillo superior en todas las esferas */
+.family-sphere::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    width: 25px;
+    height: 25px;
+    background: radial-gradient(ellipse at center, 
+        rgba(255, 255, 255, 0.8) 0%, 
+        rgba(255, 255, 255, 0.4) 40%, 
+        transparent 70%);
+    border-radius: 50%;
+    transform: rotate(-45deg);
+    z-index: 1;
+}
+
+/* Reflejo secundario */
+.family-sphere::after {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    right: 30%;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        transparent 60%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.family-sphere:hover {
+    transform: scale(1.2) translateY(-5px);
+    animation-play-state: paused;
+}
+
+.family-sphere:active {
+    transform: scale(1.1) translateY(-2px);
+}
+
+@keyframes sphereFloat {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg) scale(1);
+    }
+    25% { 
+        transform: translateY(-4px) rotate(2deg) scale(1.02);
+    }
+    50% { 
+        transform: translateY(-8px) rotate(0deg) scale(1);
+    }
+    75% { 
+        transform: translateY(-4px) rotate(-2deg) scale(1.02);
+    }
+}
+
+/* Esfera Roja - Elegante */
+.family-sphere.sphere-red {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 100, 100, 0.8) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            #FF1744 0%, 
+            #D32F2F 25%, 
+            #B71C1C 50%, 
+            #8B0000 75%, 
+            #4A0000 100%);
+    box-shadow: 
+        0 8px 25px rgba(183, 28, 28, 0.4),
+        0 15px 35px rgba(139, 0, 0, 0.3),
+        inset 0 2px 15px rgba(255, 255, 255, 0.2),
+        inset 0 -5px 20px rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.family-sphere.sphere-red:hover {
+    box-shadow: 
+        0 12px 35px rgba(183, 28, 28, 0.6),
+        0 20px 45px rgba(139, 0, 0, 0.4),
+        inset 0 2px 15px rgba(255, 255, 255, 0.3),
+        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Esfera Verde - Navideña */
+.family-sphere.sphere-green {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(100, 255, 100, 0.6) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            #4CAF50 0%, 
+            #388E3C 25%, 
+            #2E7D32 50%, 
+            #1B5E20 75%, 
+            #0D4E14 100%);
+    box-shadow: 
+        0 8px 25px rgba(46, 125, 50, 0.4),
+        0 15px 35px rgba(27, 94, 32, 0.3),
+        inset 0 2px 15px rgba(255, 255, 255, 0.2),
+        inset 0 -5px 20px rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Esfera Azul - Cristalina */
+.family-sphere.sphere-blue {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(100, 150, 255, 0.7) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            #2196F3 0%, 
+            #1976D2 25%, 
+            #1565C0 50%, 
+            #0D47A1 75%, 
+            #0A2E5C 100%);
+    box-shadow: 
+        0 8px 25px rgba(25, 118, 210, 0.4),
+        0 15px 35px rgba(13, 71, 161, 0.3),
+        inset 0 2px 15px rgba(255, 255, 255, 0.25),
+        inset 0 -5px 20px rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Esfera Dorada - Lujosa */
+.family-sphere.sphere-gold {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 235, 59, 0.8) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            #FFD700 0%, 
+            #FFC107 25%, 
+            #FF8F00 50%, 
+            #E65100 75%, 
+            #BF360C 100%);
+    box-shadow: 
+        0 8px 25px rgba(255, 193, 7, 0.5),
+        0 15px 35px rgba(255, 143, 0, 0.4),
+        inset 0 2px 15px rgba(255, 255, 255, 0.3),
+        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+    color: rgba(139, 69, 19, 0.9);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Esfera Púrpura - Mística */
+.family-sphere.sphere-purple {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(186, 104, 200, 0.7) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            #9C27B0 0%, 
+            #7B1FA2 25%, 
+            #6A1B9A 50%, 
+            #4A148C 75%, 
+            #2E0854 100%);
+    box-shadow: 
+        0 8px 25px rgba(123, 31, 162, 0.4),
+        0 15px 35px rgba(74, 20, 140, 0.3),
+        inset 0 2px 15px rgba(255, 255, 255, 0.2),
+        inset 0 -5px 20px rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Esfera Plateada - Elegante */
+.family-sphere.sphere-silver {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(245, 245, 245, 0.9) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            #E0E0E0 0%, 
+            #BDBDBD 25%, 
+            #9E9E9E 50%, 
+            #757575 75%, 
+            #424242 100%);
+    box-shadow: 
+        0 8px 25px rgba(158, 158, 158, 0.4),
+        0 15px 35px rgba(117, 117, 117, 0.3),
+        inset 0 2px 15px rgba(255, 255, 255, 0.4),
+        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+    color: rgba(66, 66, 66, 0.9);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Modal de esfera */
+.sphere-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sphere-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sphere-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.sphere-modal-content {
+    position: relative;
+    background: var(--color-card);
+    border-radius: var(--radius);
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.sphere-modal.show .sphere-modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.sphere-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.sphere-modal-close:hover {
+    color: var(--color-danger);
+}
+
+.sphere-modal-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.sphere-modal-avatar {
+    font-size: 60px;
+    margin-bottom: 15px;
+    animation: modalAvatarPulse 2s ease-in-out infinite;
+}
+
+@keyframes modalAvatarPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.sphere-modal-header h3 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.sphere-modal-message {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.1), rgba(27, 94, 32, 0.1));
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 25px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text);
+    text-align: center;
+    font-style: italic;
+}
+
+.sphere-modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.sphere-modal-actions button {
+    flex: 1;
+    max-width: 150px;
+}
+
+/* Luces navideñas SÚPER LLAMATIVAS con efectos 3D */
+.christmas-lights {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    z-index: 5;
+    animation: lightTwinkle 1.5s ease-in-out infinite alternate;
+    transform-style: preserve-3d;
+}
+
+/* Luces rojas - SÚPER BRILLANTES */
+.christmas-lights.light-red {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 40%),
+        radial-gradient(circle, #FF6B6B 0%, #FF1744 50%, #D32F2F 100%);
+    box-shadow: 
+        0 0 15px #FF1744,
+        0 0 30px #FF0000,
+        0 0 45px rgba(255, 23, 68, 0.5),
+        inset 0 2px 6px rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Luces amarillas - SÚPER BRILLANTES */
+.christmas-lights.light-yellow {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.9) 0%, transparent 40%),
+        radial-gradient(circle, #FFEB3B 0%, #FFD600 50%, #F57F17 100%);
+    box-shadow: 
+        0 0 15px #FFD600,
+        0 0 30px #FFFF00,
+        0 0 45px rgba(255, 214, 0, 0.6),
+        inset 0 2px 6px rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Luces azules - SÚPER BRILLANTES */
+.christmas-lights.light-blue {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 40%),
+        radial-gradient(circle, #42A5F5 0%, #2196F3 50%, #1565C0 100%);
+    box-shadow: 
+        0 0 15px #2196F3,
+        0 0 30px #0099FF,
+        0 0 45px rgba(33, 150, 243, 0.5),
+        inset 0 2px 6px rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Luces verdes - SÚPER BRILLANTES */
+.christmas-lights.light-green {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 40%),
+        radial-gradient(circle, #66BB6A 0%, #4CAF50 50%, #2E7D32 100%);
+    box-shadow: 
+        0 0 15px #4CAF50,
+        0 0 30px #00FF00,
+        0 0 45px rgba(76, 175, 80, 0.5),
+        inset 0 2px 6px rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Luces moradas - NUEVAS */
+.christmas-lights.light-purple {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 40%),
+        radial-gradient(circle, #AB47BC 0%, #9C27B0 50%, #6A1B9A 100%);
+    box-shadow: 
+        0 0 15px #9C27B0,
+        0 0 30px #AA00FF,
+        0 0 45px rgba(156, 39, 176, 0.5),
+        inset 0 2px 6px rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Luces naranjas - NUEVAS */
+.christmas-lights.light-orange {
+    background: 
+        radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 40%),
+        radial-gradient(circle, #FF9800 0%, #F57C00 50%, #E65100 100%);
+    box-shadow: 
+        0 0 15px #FF9800,
+        0 0 30px #FF6600,
+        0 0 45px rgba(255, 152, 0, 0.5),
+        inset 0 2px 6px rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes lightTwinkle {
+    0% { 
+        opacity: 0.7;
+        transform: scale(1) rotateZ(0deg);
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.3) rotateZ(180deg);
+        filter: brightness(1.3);
+    }
+    100% { 
+        opacity: 0.8;
+        transform: scale(1.1) rotateZ(360deg);
+        filter: brightness(1.1);
+    }
+}
+
+/* Efectos de nieve en el árbol mejorados */
+.tree-snow {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.9;
+    animation: treeSnowFall 12s linear infinite;
+    z-index: 2;
+}
+
+.tree-snow.small {
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+.tree-snow.medium {
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 100%);
+}
+
+.tree-snow.large {
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 100%);
+}
+
+@keyframes treeSnowFall {
+    0% {
+        transform: translateY(-30px) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    90% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(120vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .family-tree-container {
+        height: 75vh;
+        min-height: 550px;
+    }
+    
+    .christmas-tree {
+        width: 500px;
+        height: 400px;
+        bottom: 20px;
+    }
+    
+    /* Ajustar capas del árbol para móvil - PROPORCIONAL AL GIGANTE */
+    .tree-layer:nth-child(1) {
+        bottom: 280px;
+        border-width: 0 75px 120px 75px;
+    }
+    
+    .tree-layer:nth-child(2) {
+        bottom: 210px;
+        border-width: 0 110px 130px 110px;
+    }
+    
+    .tree-layer:nth-child(3) {
+        bottom: 140px;
+        border-width: 0 140px 150px 140px;
+    }
+    
+    .tree-layer:nth-child(4) {
+        bottom: 60px;
+        border-width: 0 170px 160px 170px;
+    }
+    
+    .tree-star {
+        font-size: 80px;
+        bottom: 380px;
+    }
+    
+    .christmas-tree::before {
+        width: 45px;
+        height: 90px;
+        bottom: -40px;
+    }
+    
+    .family-sphere {
+        width: 55px;
+        height: 55px;
+        font-size: 10px;
+    }
+    
+    .christmas-lights {
+        width: 7px;
+        height: 7px;
+    }
+    
+    .sphere-modal-content {
+        padding: 20px;
+        margin: 20px;
+    }
+    
+    .sphere-modal-avatar {
+        font-size: 50px;
+    }
+    
+    .sphere-modal-header h3 {
+        font-size: 24px;
+    }
+    
+    .sphere-modal-actions {
+        flex-direction: column;
+    }
+    
+    .sphere-modal-actions button {
+        max-width: none;
+    }
+}
+
+/* ============================================
+   GALERÍA DE FOTOS NAVIDEÑAS
+   ============================================ */
+
+.gallery-warning {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 193, 7, 0.1));
+    border: 2px solid var(--color-warning);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: warningPulse 2s ease-in-out infinite;
+}
+
+.warning-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.gallery-warning p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+@keyframes warningPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 152, 0, 0.5);
+    }
+}
+
+.upload-card {
+    background: linear-gradient(135deg, rgba(45, 27, 27, 0.95), rgba(35, 20, 20, 0.95));
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 30px rgba(15, 123, 62, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(15, 123, 62, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-card::before {
+    content: '📸';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 120px;
+    opacity: 0.05;
+    animation: rotate 20s linear infinite;
+}
+
+.upload-card h3 {
+    margin: 0 0 20px 0;
+    background: linear-gradient(135deg, #0F7B3E, #4CAF50);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 22px;
+    text-align: center;
+    font-weight: 800;
+    position: relative;
+    z-index: 2;
+}
+
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.photo-card {
+background: linear-gradient(135deg, rgba(45, 27, 27, 0.95), rgba(35, 20, 20, 0.95));
+border-radius: 20px;
+overflow: hidden;
+box-shadow: 
+var(--shadow-lg),
+0 0 20px rgba(196, 30, 58, 0.15);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+border: 1px solid rgba(196, 30, 58, 0.2);
+}
+
+.photo-card:hover {
+transform: translateY(-8px) scale(1.02);
+box-shadow: 
+0 15px 50px rgba(0, 0, 0, 0.4),
+0 0 40px rgba(196, 30, 58, 0.3);
+border-color: rgba(196, 30, 58, 0.5);
+}
+
+.photo-header {
+padding: 15px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.photo-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.photo-avatar {
+    font-size: 32px;
+}
+
+.photo-username {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: block;
+}
+
+.photo-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.btn-delete-photo {
+    background: linear-gradient(135deg, #D32F2F, #F44336);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-delete-photo:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(211, 47, 47, 0.4);
+}
+
+.photo-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-caption {
+    padding: 15px;
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.photo-actions {
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-like {
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    border-radius: 25px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.btn-like:hover {
+    background: var(--color-primary);
+    transform: scale(1.05);
+}
+
+.btn-like.liked {
+    background: linear-gradient(135deg, #E91E63, #F06292);
+    border-color: #E91E63;
+    animation: likeAnimation 0.5s ease;
+}
+
+@keyframes likeAnimation {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.like-icon {
+    font-size: 20px;
+}
+
+.like-count {
+    font-weight: 600;
+}
+
+/* ============================================
+   VOTACIONES FAMILIARES
+   ============================================ */
+
+.create-poll-card {
+    background: linear-gradient(135deg, rgba(45, 27, 27, 0.95), rgba(35, 20, 20, 0.95));
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 30px rgba(66, 165, 245, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(66, 165, 245, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.create-poll-card::before {
+    content: '🗳️';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    font-size: 150px;
+    opacity: 0.05;
+    animation: rotate 25s linear infinite reverse;
+}
+
+.create-poll-card h3 {
+    margin: 0 0 20px 0;
+    background: linear-gradient(135deg, #2196F3, #42A5F5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 22px;
+    text-align: center;
+    font-weight: 800;
+    position: relative;
+    z-index: 2;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.polls-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.poll-card {
+    background: linear-gradient(135deg, rgba(45, 27, 27, 0.95), rgba(35, 20, 20, 0.95));
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 25px rgba(15, 123, 62, 0.15);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(15, 123, 62, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.poll-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(15, 123, 62, 0.08) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+.poll-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 
+        var(--shadow-lg),
+        0 0 35px rgba(15, 123, 62, 0.3);
+    border-color: rgba(15, 123, 62, 0.5);
+}
+
+.poll-card.poll-closed {
+    opacity: 0.7;
+    background: linear-gradient(135deg, rgba(100, 100, 100, 0.2), rgba(80, 80, 80, 0.2));
+}
+
+.poll-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.poll-header h3 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 20px;
+    flex: 1;
+}
+
+.poll-badge-closed,
+.poll-badge-voted {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.poll-badge-closed {
+    background: linear-gradient(135deg, #757575, #9E9E9E);
+    color: white;
+}
+
+.poll-badge-voted {
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    color: white;
+}
+
+.poll-description {
+    color: var(--text-secondary);
+    margin: 0 0 15px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.poll-deadline {
+    color: var(--color-warning);
+    margin: 0 0 20px 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.poll-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.poll-option {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.poll-option:hover {
+    border-color: var(--color-primary);
+    transform: translateX(5px);
+}
+
+.poll-option.selected {
+    border-color: var(--color-primary);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.poll-option-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    opacity: 0.2;
+    transition: width 0.5s ease;
+}
+
+.poll-option-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.poll-option-text {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.poll-option-votes {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.poll-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.poll-total {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.btn-close-poll,
+.btn-delete-poll {
+    background: linear-gradient(135deg, #757575, #9E9E9E);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 15px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-close-poll:hover {
+    background: linear-gradient(135deg, #616161, #757575);
+    transform: scale(1.05);
+}
+
+.btn-delete-poll {
+    background: linear-gradient(135deg, #D32F2F, #F44336);
+}
+
+.btn-delete-poll:hover {
+    background: linear-gradient(135deg, #C62828, #D32F2F);
+    transform: scale(1.05);
+}
+
+/* ============================================
+   MENSAJE ESPECIAL DEL ADMINISTRADOR
+   ============================================ */
+
+.admin-message-card {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 193, 7, 0.15));
+    border: 2px solid var(--color-warning);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+    animation: messageSlideIn 0.8s ease-out, messageGlow 3s ease-in-out infinite;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes messageGlow {
+    0%, 100% {
+        box-shadow: 0 10px 40px rgba(255, 215, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 10px 50px rgba(255, 215, 0, 0.4);
+    }
+}
+
+.admin-message-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.admin-message-icon {
+    font-size: 32px;
+    animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.admin-message-header h3 {
+    margin: 0;
+    color: var(--color-warning);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.admin-message-text {
+    color: var(--text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 15px 0;
+    font-weight: 500;
+}
+
+.admin-message-author {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-style: italic;
+    margin: 0;
+    text-align: right;
+}
+
+/* ============================================
+   RESPONSIVE PARA NUEVAS FUNCIONALIDADES
+   ============================================ */
+
+@media (max-width: 768px) {
+    .photos-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .photo-image {
+        height: 250px;
+    }
+    
+    .poll-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .poll-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .admin-message-card {
+        padding: 20px;
+    }
+    
+    .admin-message-icon {
+        font-size: 28px;
+    }
+    
+    .admin-message-header h3 {
+        font-size: 18px;
+    }
+    
+    .admin-message-text {
+        font-size: 14px;
     }
 }
