@@ -334,6 +334,13 @@ function showWelcomeScreen() {
 // ============================================
 
 function showScreen(screenId) {
+    // Destruir árbol 3D si estamos saliendo de esa pantalla
+    if (AppState.currentScreen === 'tree3DScreen' && screenId !== 'tree3DScreen') {
+        if (typeof destroyTree3D === 'function') {
+            destroyTree3D();
+        }
+    }
+    
     // Ocultar todas las pantallas
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
@@ -1924,6 +1931,13 @@ function registerEventListeners() {
                     loadPhotos();
                 } else if (screen === 'pollsScreen') {
                     loadPolls();
+                } else if (screen === 'tree3DScreen') {
+                    // Inicializar árbol 3D con un pequeño delay para asegurar que el contenedor esté visible
+                    setTimeout(() => {
+                        if (typeof initTree3D === 'function') {
+                            initTree3D();
+                        }
+                    }, 100);
                 }
             }
         });

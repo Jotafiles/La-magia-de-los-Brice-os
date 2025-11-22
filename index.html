@@ -365,6 +365,16 @@
             </div>
         </div>
 
+        <!-- PANTALLA DE ÁRBOL FAMILIAR -->
+        <div id="tree3DScreen" class="screen">
+            <div class="screen-header">
+                <h2>🌲 Árbol Familiar Navideño</h2>
+                <p class="screen-subtitle">Toca las esferas para ver a cada miembro de la familia</p>
+            </div>
+
+            <div id="tree3DContainer"></div>
+        </div>
+
         <!-- PANTALLA DE PERFIL -->
         <div id="profileScreen" class="screen">
             <div class="screen-header">
@@ -439,10 +449,10 @@
                 <span class="nav-icon">🏠</span>
                 <span class="nav-label">Inicio</span>
             </button>
-            
-            <button class="nav-item" data-screen="participantsScreen">
-                <span class="nav-icon">✨</span>
-                <span class="nav-label">Estrellas</span>
+
+            <button class="nav-item" data-screen="tree3DScreen">
+                <span class="nav-icon">🌲</span>
+                <span class="nav-label">Árbol Familiar</span>
             </button>
             
             <button class="nav-item" data-screen="galleryScreen">
@@ -454,6 +464,8 @@
                 <span class="nav-icon">🗳️</span>
                 <span class="nav-label">Votar</span>
             </button>
+            
+            
             
             <button class="nav-item" data-screen="profileScreen">
                 <span class="nav-icon">⚙️</span>
@@ -506,6 +518,9 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/controls/OrbitControls.js"></script>
+    <script src="tree3d.js"></script>
     <script src="supabase-config.js"></script>
     <script src="realtime.js"></script>
     <script src="app.js"></script>

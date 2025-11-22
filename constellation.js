@@ -113,11 +113,13 @@ function initializeCanvas() {
     canvas.height = container.offsetHeight;
     ctx = canvas.getContext('2d');
     
-    // Ajustar canvas en resize
+    // Ajustar canvas en resize (solo si el canvas existe y es visible)
     window.addEventListener('resize', () => {
-        canvas.width = container.offsetWidth;
-        canvas.height = container.offsetHeight;
-        drawConstellationLines();
+        if (canvas && canvas.parentElement && canvas.offsetWidth > 0) {
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            drawConstellationLines();
+        }
     });
 }
 
@@ -190,6 +192,12 @@ function calculateStarPositions(count) {
 // CREAR ESTRELLA INDIVIDUAL
 // ============================================
 function createStar(user, position, index) {
+    // Verificar que position existe
+    if (!position || typeof position.x === 'undefined' || typeof position.y === 'undefined') {
+        console.error('Posición inválida para estrella:', position);
+        return document.createElement('div'); // Retornar elemento vacío
+    }
+    
     const star = document.createElement('div');
     star.className = 'family-star';
     star.style.left = position.x + 'px';
@@ -236,14 +244,19 @@ function createStar(user, position, index) {
 function drawConstellationLines() {
     if (!ctx || !canvas) return;
     
+    // Verificar que el canvas esté visible y tenga dimensiones válidas
+    if (canvas.width === 0 || canvas.height === 0) return;
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     const stars = document.querySelectorAll('.family-star');
+    if (stars.length === 0) return; // No hay estrellas para conectar
+    
     const positions = Array.from(stars).map(star => ({
         x: parseFloat(star.style.left),
         y: parseFloat(star.style.top),
         color: star.getAttribute('data-color')
-    }));
+    })).filter(pos => !isNaN(pos.x) && !isNaN(pos.y)); // Filtrar posiciones inválidas
     
     // Conectar estrellas cercanas
     const maxDistance = 200; // Distancia máxima para conexión
