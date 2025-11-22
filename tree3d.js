@@ -17,10 +17,13 @@ const isMobile = window.innerWidth <= 768;
 
 // Configuración de rendimiento según dispositivo
 const PERFORMANCE_CONFIG = {
-    snowCount: isMobile ? 500 : 1000,
-    sparkleCount: isMobile ? 100 : 300,
+    snowCount: isMobile ? 200 : 1000,
+    sparkleCount: isMobile ? 50 : 300,
     enableShadows: !isMobile,
-    ornamentLights: isMobile ? 3 : 6
+    ornamentLights: isMobile ? 2 : 6,
+    christmasLights: isMobile ? 15 : 30,
+    treeSegments: isMobile ? 6 : 8,
+    sphereSegments: isMobile ? 16 : 32
 };
 
 // Mensajes bonitos para las esferas
@@ -80,7 +83,10 @@ function initTree3D() {
     // Crear cámara (centrada en el árbol)
     const aspect = container.clientWidth / container.clientHeight;
     camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
-    camera.position.set(0, 3.5, 10);
+    
+    // Ajustar distancia según dispositivo
+    const cameraDistance = isMobile ? 14 : 10; // Más lejos en móvil
+    camera.position.set(0, 3.5, cameraDistance);
     camera.lookAt(0, 3.5, 0);
 
     // Crear renderer
@@ -104,11 +110,11 @@ function initTree3D() {
         controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        controls.minDistance = 7;
-        controls.maxDistance = 20;
+        controls.minDistance = isMobile ? 10 : 7;
+        controls.maxDistance = isMobile ? 25 : 20;
         controls.maxPolarAngle = Math.PI / 2;
         controls.target.set(0, 3.5, 0); // Punto central del árbol
-        controls.autoRotate = true;
+        controls.autoRotate = !isMobile; // Desactivar auto-rotación en móvil
         controls.autoRotateSpeed = 0.5;
         console.log('✅ OrbitControls inicializados');
     }
@@ -213,7 +219,7 @@ function createTree() {
     ];
 
     levels.forEach(level => {
-        const coneGeometry = new THREE.ConeGeometry(level.radius, level.height, 8);
+        const coneGeometry = new THREE.ConeGeometry(level.radius, level.height, PERFORMANCE_CONFIG.treeSegments);
         const coneMaterial = new THREE.MeshStandardMaterial({
             color: 0x0d5c0d,
             roughness: 0.7,
@@ -244,8 +250,8 @@ function createChristmasLights() {
     const lightsGroup = new THREE.Group();
     
     // Crear guirnalda de luces en espiral alrededor del árbol
-    const numLights = 30;
-    const spiralTurns = 4; // Número de vueltas alrededor del árbol
+    const numLights = PERFORMANCE_CONFIG.christmasLights;
+    const spiralTurns = isMobile ? 3 : 4; // Menos vueltas en móvil
     
     for (let i = 0; i < numLights; i++) {
         const t = i / numLights;
@@ -344,7 +350,7 @@ async function createOrnaments() {
         const pos = positions[i];
         const user = users[i];
         
-        const geometry = new THREE.SphereGeometry(0.25, 20, 20);
+        const geometry = new THREE.SphereGeometry(0.25, PERFORMANCE_CONFIG.sphereSegments, PERFORMANCE_CONFIG.sphereSegments);
         const material = new THREE.MeshStandardMaterial({
             color: colors[i % colors.length],
             roughness: 0.2,
